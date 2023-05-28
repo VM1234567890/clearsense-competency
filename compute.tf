@@ -41,9 +41,9 @@ resource "aws_launch_template" "this" {
   image_id      = data.aws_ami.this.id
   instance_type = var.instance_type
   #vpc_security_group_ids = [aws_security_group.this.id]
-  network_interfaces{
-    subnet_id = aws_subnet.this.id
-    security_groups   = [aws_security_group.this.id]
+  network_interfaces {
+    subnet_id       = aws_subnet.this.id
+    security_groups = [aws_security_group.this.id]
     #associate_public_ip_address = true
   }
   iam_instance_profile {
@@ -102,7 +102,7 @@ node server.js
 
 sudo systemctl restart httpd
 EOT
-)
+  )
 
 
   lifecycle {
@@ -121,8 +121,8 @@ resource "aws_autoscaling_group" "this" {
     id      = aws_launch_template.this.id
     version = "$Latest"
   }
-    
-  health_check_type    = "ELB"
+
+  health_check_type = "ELB"
   load_balancers = [
     aws_elb.this.id
   ]
@@ -140,54 +140,54 @@ resource "aws_autoscaling_group" "this" {
 }
 
 resource "aws_autoscaling_policy" "web_policy_up" {
-  name = "web_policy_up"
-  scaling_adjustment = 1
-  adjustment_type = "ChangeInCapacity"
-  cooldown = 300
+  name                   = "web_policy_up"
+  scaling_adjustment     = 1
+  adjustment_type        = "ChangeInCapacity"
+  cooldown               = 300
   autoscaling_group_name = aws_autoscaling_group.this.name
 }
 
 resource "aws_cloudwatch_metric_alarm" "web_cpu_alarm_up" {
-  alarm_name = "web_cpu_alarm_up"
+  alarm_name          = "web_cpu_alarm_up"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods = "2"
-  metric_name = "CPUUtilization"
-  namespace = "AWS/EC2"
-  period = "120"
-  statistic = "Average"
-  threshold = "60"
+  evaluation_periods  = "2"
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/EC2"
+  period              = "120"
+  statistic           = "Average"
+  threshold           = "60"
 
   dimensions = {
     AutoScalingGroupName = aws_autoscaling_group.this.name
   }
 
   alarm_description = "This metric monitor EC2 instance CPU utilization"
-  alarm_actions = [ aws_autoscaling_policy.web_policy_up.arn ]
+  alarm_actions     = [aws_autoscaling_policy.web_policy_up.arn]
 }
 
 resource "aws_autoscaling_policy" "web_policy_down" {
-  name = "web_policy_down"
-  scaling_adjustment = -1
-  adjustment_type = "ChangeInCapacity"
-  cooldown = 300
+  name                   = "web_policy_down"
+  scaling_adjustment     = -1
+  adjustment_type        = "ChangeInCapacity"
+  cooldown               = 300
   autoscaling_group_name = aws_autoscaling_group.this.name
 }
 
 resource "aws_cloudwatch_metric_alarm" "web_cpu_alarm_down" {
-  alarm_name = "web_cpu_alarm_down"
+  alarm_name          = "web_cpu_alarm_down"
   comparison_operator = "LessThanOrEqualToThreshold"
-  evaluation_periods = "2"
-  metric_name = "CPUUtilization"
-  namespace = "AWS/EC2"
-  period = "120"
-  statistic = "Average"
-  threshold = "10"
+  evaluation_periods  = "2"
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/EC2"
+  period              = "120"
+  statistic           = "Average"
+  threshold           = "10"
 
   dimensions = {
     AutoScalingGroupName = aws_autoscaling_group.this.name
   }
 
   alarm_description = "This metric monitor EC2 instance CPU utilization"
-  alarm_actions = [ aws_autoscaling_policy.web_policy_down.arn ]
+  alarm_actions     = [aws_autoscaling_policy.web_policy_down.arn]
 }
 

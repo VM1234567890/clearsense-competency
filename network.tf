@@ -33,7 +33,7 @@ resource "aws_subnet" "db1" {
   availability_zone = "${var.region}a"
 
   tags = {
-    Name = "db_subnet1"            #var.db_subnet1_name
+    Name = "db_subnet1" #var.db_subnet1_name
   }
 }
 resource "aws_subnet" "db2" {
@@ -42,7 +42,7 @@ resource "aws_subnet" "db2" {
   availability_zone = "${var.region}b"
 
   tags = {
-    Name ="db_subnet2"            #var.db_subnet2_name
+    Name = "db_subnet2" #var.db_subnet2_name
   }
 }
 
@@ -50,7 +50,7 @@ resource "aws_subnet" "db2" {
 resource "aws_security_group" "this" {
   name        = var.sg_name
   description = "${var.sg_description} (terraform-managed)"
-  vpc_id    = aws_vpc.this.id
+  vpc_id      = aws_vpc.this.id
 
   ingress {
     from_port   = 80
@@ -78,7 +78,7 @@ resource "aws_security_group" "rds_sg" {
     from_port   = var.port
     to_port     = var.port
     protocol    = "tcp"
-    cidr_blocks = [aws_vpc.this.cidr_block,]
+    cidr_blocks = [aws_vpc.this.cidr_block, ]
   }
 
   # Allow all outbound traffic.
@@ -86,13 +86,13 @@ resource "aws_security_group" "rds_sg" {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = [aws_vpc.this.cidr_block,]
+    cidr_blocks = [aws_vpc.this.cidr_block, ]
   }
 }
 
 # internet gateway and Nat
 
-resource "aws_eip" "this"{
+resource "aws_eip" "this" {
   #domain  = "vpc"
 }
 
@@ -116,42 +116,42 @@ resource "aws_nat_gateway" "this" {
 }
 
 resource "aws_route_table" "this" {
-    vpc_id = aws_vpc.this.id
-    route {
-        cidr_block = "0.0.0.0/0"
-        gateway_id = aws_internet_gateway.this.id
-    }
-    tags = {
-        Name = "Public Subnets Route Table for My VPC"
-    }
+  vpc_id = aws_vpc.this.id
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.this.id
+  }
+  tags = {
+    Name = "Public Subnets Route Table for My VPC"
+  }
 }
 
 resource "aws_route_table_association" "this" {
-    subnet_id = aws_subnet.public.id
-    route_table_id = aws_route_table.this.id
+  subnet_id      = aws_subnet.public.id
+  route_table_id = aws_route_table.this.id
 }
 
 resource "aws_route_table" "nat" {
-    vpc_id = aws_vpc.this.id
-    route {
-        cidr_block = "0.0.0.0/0"
-        nat_gateway_id = aws_nat_gateway.this.id
-    }
-    tags = {
-        Name = "private Subnet Route Table to NAT"
-    }
+  vpc_id = aws_vpc.this.id
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.this.id
+  }
+  tags = {
+    Name = "private Subnet Route Table to NAT"
+  }
 }
 
 resource "aws_route_table_association" "nat" {
-    subnet_id = aws_subnet.this.id
-    route_table_id = aws_route_table.nat.id
+  subnet_id      = aws_subnet.this.id
+  route_table_id = aws_route_table.nat.id
 }
 
 
 resource "aws_security_group" "elb_http" {
   name        = "elb_http"
   description = "Allow HTTP traffic to instances through Elastic Load Balancer"
-  vpc_id = aws_vpc.this.id
+  vpc_id      = aws_vpc.this.id
 
   ingress {
     from_port   = 80
@@ -161,10 +161,10 @@ resource "aws_security_group" "elb_http" {
   }
 
   egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {

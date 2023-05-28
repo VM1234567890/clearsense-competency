@@ -43,24 +43,24 @@ variable "sg_description" {
 
 # Compute Variables
 
-variable aws_ami_value {
+variable "aws_ami_value" {
   type = string
 }
 
-variable instance_type {
+variable "instance_type" {
   type = string
 }
 
-variable instance_name {
+variable "instance_name" {
   type = string
 }
 
-variable key_name {
+variable "key_name" {
   type = string
 }
 
 #RDS Database
 
-variable port{
-    type = number
+variable "port" {
+  type = number
 }

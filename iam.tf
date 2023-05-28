@@ -30,7 +30,7 @@ EOF
 }
 
 resource "aws_iam_role" "custom_role" {
-  name = "CustomRole"
+  name               = "CustomRole"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
