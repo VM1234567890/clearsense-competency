@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Database Operations</title>
+</head>
+<body>
+    <h1>Database Operations</h1>
+
+    <form id="createForm" onsubmit="performCreate(event)">
+        <h2>Create Record</h2>
+        <label for="name">Name:</label>
+        <input type="text" id="name" required>
+        <br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" required>
+        <br>
+        <button type="submit">Create</button>
+    </form>
+
+    <hr>
+
+    <form id="deleteForm" onsubmit="performDelete(event)">
+        <h2>Delete Record</h2>
+        <label for="recordId">Record ID:</label>
+        <input type="text" id="recordId" required>
+        <br>
+        <button type="submit">Delete</button>
+    </form>
+
+    <script>
+        // Function to perform create operation
+        function performCreate(event) {
+            event.preventDefault();
+
+            var name = document.getElementById('name').value;
+            var email = document.getElementById('email').value;
+
+            // Send an AJAX request to the server-side endpoint to create the record
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/create', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    alert('Record created successfully!');
+                } else {
+                    alert('Failed to create record. Please try again.');
+                }
+            };
+            xhr.send(JSON.stringify({ name: name, email: email }));
+        }
+
+        // Function to perform delete operation
+        function performDelete(event) {
+            event.preventDefault();
+
+            var recordId = document.getElementById('recordId').value;
+
+            // Send an AJAX request to the server-side endpoint to delete the record
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/delete', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    alert('Record deleted successfully!');
+                } else {
+                    alert('Failed to delete record. Please try again.');
+                }
+            };
+            xhr.send(JSON.stringify({ recordId: recordId }));
+        }
+    </script>
+</body>
+</html>
