@@ -191,28 +191,3 @@ resource "aws_cloudwatch_metric_alarm" "web_cpu_alarm_down" {
   alarm_actions = [ aws_autoscaling_policy.web_policy_down.arn ]
 }
 
-
-
-# resource "aws_instance" "this" {
-#   ami           = data.aws_ami.this.id
-#   instance_type = var.instance_type
-#   security_groups = [aws_security_group.this.id]
-#   subnet_id     = aws_subnet.this.id
-#   key_name      = aws_key_pair.this.key_name
-#   user_data = file("user-data-apache2.sh")
-#   tags = {
-#     Name = var.instance_name
-#   }
-# }
-
-
-# resource "tls_private_key" "this" {
-#   algorithm = "RSA"
-#   rsa_bits  = 4096
-# }
-
-# resource "aws_key_pair" "this" {
-#   key_name   = var.key_name
-#   public_key = tls_private_key.this.public_key_openssh
-# }
-
