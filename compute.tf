@@ -104,60 +104,6 @@ sudo systemctl restart httpd
 EOT
 )
 
-  #user_data = file("user-data-apache2.sh")
-#   user_data = base64encode(<<-EOT
-# #!/bin/bash
-# sudo apt-get update
-# sudo apt-get install -y apache2
-# sudo systemctl start apache2
-# sudo systemctl enable apache2
-# # Install Node.js
-# curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
-# sudo apt-get install -y nodejs
-
-# aws ec2 attach-volume --volume-id vol-0523cd21094b7de20 --instance-id $(curl -s http://169.254.169.254/latest/meta-data/instance-id) --device /dev/xvdf
-
-# sleep 10  # Wait for the attachment to complete
-
-# sudo mkfs -t ext4 /dev/xvdf
-# sudo mkdir /mnt/ebs
-# sudo mount /dev/xvdf /mnt/ebs
-# echo "/dev/xvdf  /mnt/ebs  ext4  defaults,nofail  0  2" | sudo tee -a /etc/fstab
-# # Fetch the secret value and assign it to a variable
-# export SECRET_VALUE=$(aws secretsmanager get-secret-value --secret-id "${aws_db_instance.this.master_user_secret[0].secret_arn}" --query 'SecretString' --output text)
-
-# # Extract the username and password using jq
-# USERNAME=$(echo $SECRET_VALUE | jq -r '.username')
-# PASSWORD=$(echo "$SECRET_VALUE" | jq -r '.password')
-
-# export DB_USER="$USERNAME"
-# export DB_PASSWORD="$PASSWORD"
-
-# export DB_HOST="${aws_db_instance.this.endpoint}"
-# export DB_NAME="${aws_db_instance.this.db_name}"
-
-# # Configure Apache to use the EBS volume as the default directory
-# sudo mv /var/www/html /var/www/html_backup  # Backup the original directory
-# mkdir /mnt/ebs/html
-# sudo ln -s /mnt/ebs/html /var/www/html  # Create a symbolic link to the EBS volume
-
-# aws s3 cp s3://${aws_s3_bucket.example.id}/index.html /mnt/ebs/html/index.html
-# aws s3 cp s3://${aws_s3_bucket.example.id}/database.html /mnt/ebs/html/database.html
-
-# mkdir /mnt/ebs/server
-# aws s3 cp s3://${aws_s3_bucket.example.id}/server.js /mnt/ebs/server/server.js
-# cd /mnt/ebs/server
-# # Install required dependencies
-# npm init -y
-# npm install express
-
-# # Start the Node.js server
-# node server.js
-
-# sudo systemctl restart apache2
-# EOT
-# )
-
 
   lifecycle {
     create_before_destroy = true
