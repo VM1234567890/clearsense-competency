@@ -1,13 +1,11 @@
 resource "aws_iam_policy" "custom_policy" {
-  name        = "CustomPolicy"
-  description = "Custom IAM policy for EC2 instances"
-  policy      = <<EOF
+  policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
     {
       "Effect": "Allow",
-      "Action": "ec2:DescribeInstances",
+      "Action": ["ec2:*"],
       "Resource": "*"
     },
     {
@@ -20,7 +18,7 @@ resource "aws_iam_policy" "custom_policy" {
     {
       "Effect": "Allow",
       "Action": [
-        "s3:GetObject"
+        "s3:*"
       ],
       "Resource": "${aws_s3_bucket.example.arn}/*"
     }
@@ -28,6 +26,7 @@ resource "aws_iam_policy" "custom_policy" {
 }
 EOF
 }
+
 
 resource "aws_iam_role" "custom_role" {
   name               = "CustomRole"
@@ -51,3 +50,9 @@ resource "aws_iam_role_policy_attachment" "custom_attachment" {
   role       = aws_iam_role.custom_role.name
   policy_arn = aws_iam_policy.custom_policy.arn
 }
+
+resource "aws_iam_instance_profile" "custome_profile" {
+  name = "web-iam-instance-profile"
+  role = aws_iam_role.custom_role.name
+}
+

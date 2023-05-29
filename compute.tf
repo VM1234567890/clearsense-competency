@@ -47,7 +47,7 @@ resource "aws_launch_template" "this" {
     #associate_public_ip_address = true
   }
   iam_instance_profile {
-    name = aws_iam_role.custom_role.name
+    name = aws_iam_instance_profile.custome_profile.name
   }
   user_data = base64encode(<<-EOT
 #!/bin/bash
